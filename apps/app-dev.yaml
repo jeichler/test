@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  labels:
+    app.kubernetes.io/instance: app-dev
+  name: app-dev
+  namespace: user1
+spec:
+  destination:
+    namespace: app-dev
+    server: https://kubernetes.default.svc
+  ignoreDifferences:
+  - group: argoproj.io/v1alpha1
+    jsonPointers:
+    - /spec/source/directory
+    kind: Application
+    name: ocs
+  project: default
+  source:
+    directory:
+      recurse: true
+    path: overlays/dev
+    repoURL: git@github.com:jeichler/test.git 
+    targetRevision: main
+  syncPolicy:
+    automated: {}
+
